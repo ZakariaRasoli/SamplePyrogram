@@ -16,6 +16,6 @@ app = Client(
     api_hash=config['pyrogram']['api_hash']
 )
 
-messageHandler(app, admins, db)
+messageHandler(app, admins)
 
 app.run()
