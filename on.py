@@ -1,16 +1,13 @@
 from pyrogram import Client
 import configparser
-
 from messageHandler import messageHandler
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-
 admins = []
 for i in config['admins']:
     admins.append(int(config['admins'][i]))
-
 
 app = Client(
     "my_online",
