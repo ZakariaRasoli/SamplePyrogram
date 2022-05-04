@@ -1,7 +1,5 @@
-from pyrogram import Client
-from pyrogram import filters
+from pyrogram import Client, filters, emoji
 from pyrogram.types import Message
-
 
 def messageHandler(app: Client, admins):
     prefixes = ["/", '!', '.', '#']
@@ -9,17 +7,18 @@ def messageHandler(app: Client, admins):
     admin_commands = ['usage']
     
     @app.on_message(filters=filters.command(commands=fun_commands, prefixes=prefixes))
-    def fun(client, message: Message):
+    async def fun(client, message: Message):
         command = message.command[0]
         if command == 'id':
-            message.reply("**%s**\n`%d`" %(message.from_user.first_name, message.from_user.id))
+            await message.reply("**%s**\n`%d`" %(message.from_user.first_name, message.from_user.id))
 
     @app.on_message(filters=filters.user(users=admins) & filters.command(commands=admin_commands, prefixes=prefixes))
-    def admin(client, message: Message):
+    async def admin(client, message: Message):
         command = message.command[0]
         if command == 'usage':
             memory = memory_usage()['rss']
-            message.reply(f"📦 **Memory usage**: `{memory}`" )
+            em = emoji.CARD_INDEX_DIVIDERS
+            await message.reply(f"{em} **Memory usage**: `{memory}`" )
 
 
 def memory_usage():
