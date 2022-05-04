@@ -1,7 +1,7 @@
 from pyrogram import Client
 import configparser
 
-from newMessageHandler import messageHandler
+from messageHandler import messageHandler
 
 config = configparser.ConfigParser()
 config.read('config.ini')
