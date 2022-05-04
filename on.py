@@ -1,13 +1,15 @@
 from pyrogram import Client
 import configparser
-from messageHandler import messageHandler
+
+from newMessageHandler import messageHandler
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+
 admins = []
 for i in config['admins']:
-    admins.append(config['admins'][i])
+    admins.append(int(config['admins'][i]))
 
 
 app = Client(
