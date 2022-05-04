@@ -12,7 +12,7 @@ for i in config['admins']:
 app = Client(
     "my_online",
     api_id=config['pyrogram']['api_id'],
-    api_hash=config['pyrogram']['api_hash']
+    api_hash=config['pyrogram']['api_hash'],
 )
 
 messageHandler(app, admins)
