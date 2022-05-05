@@ -6,8 +6,9 @@ from datetime import datetime
 
 
 class Fun:
-    def __init__(self, app: Client):
+    def __init__(self, app: Client, admins):
         self.app = app
+        self.admins = admins
 
     async def idCommand(self, message: Message, from_id):
         chat = message.chat
@@ -15,37 +16,46 @@ class Fun:
         try:
             user = await self.app.get_chat(from_id)
             user2 = await self.app.get_users(from_id)
+            cap1 = []
             if user.id:
-                cap = '**User Info**\n ‌    ‍ ‌‌‌‌   **Firstname:** `%s`\n' %(user.first_name)
+                cap1.append('**Firstname:** `%s`' %(user.first_name))
                 if user.username:
-                    cap += ' ‌    ‍ ‌‌‌‌   **Username:** `%s`\n' %(user.username)
+                    cap1.append('**Username:** `%s`' %(user.username))
                 if user.last_name:
-                    cap += ' ‌    ‍ ‌‌‌‌   **Lastname:** `%s`\n' %(user.last_name)
+                    cap1.append('**Lastname:** `%s`' %(user.last_name))
                 if user.bio:
-                    cap += ' ‌    ‍ ‌‌‌‌   **Bio:** `%s`\n' %(user.bio)
+                    cap1.append('**Bio:** `%s`' %(user.bio))
                 if user.dc_id:
-                    cap += ' ‌    ‍ ‌‌‌‌   **dc_id:** `%s`\n' %(user.dc_id)
+                    cap1.append('**dc_id:** `%s`' %(user.dc_id))
                 if user2.language_code:
-                    cap += ' ‌    ‍ ‌‌‌‌   **Language Code:** `%s`\n' %(user2.language_code)
+                    cap1.append('**Language Code:** `%s`' %(user2.language_code))
                 
-                cap += ' ‌    ‍ ‌‌‌‌   **ID:** `%s`\n' %(user.id) 
-                cap += ' ‌    ‍ ‌‌‌‌   **Status:** `%s`\n' %(user2.status) 
-
+                cap1.append('**ID:** `%s`' %(user.id))
+                cap1.append('**Status:** `%s`' %(user2.status))
+                import outputformat as ouf
+                cap1 = str(ouf.showlist(cap1, style="box", title="**User Info** ‌    ‍ ‌", return_str=True))
+ 
                 if chat.type == enums.chat_type.ChatType.SUPERGROUP:
-                    cap += '**Group Info**\n ‌    ‍ ‌‌‌‌   **Title:** `%s`\n' %(chat.title)
-                    cap += ' ‌    ‍ ‌‌‌‌   **ID:** `%s`\n' %(chat_id)
-                
+                    cap2 = []
+                    cap2.append('**Title:** `%s`' %(chat.title))
+                    cap2.append('**ID:** `%s`' %(chat_id))
+                    cap2 = str(ouf.showlist(cap2, style="box", title="**Group Info** ‌    ‍ ‌", return_str=True))
+                    cap1 = cap1 + cap2
                 if user.photo:
                     photos = []
                     pic = []
                     async for photo in self.app.get_chat_photos(from_id, 9):
                         photos.append(photo.file_id)
                     for photo in photos:
-                        print(photo)
-                        pic.append(InputMediaPhoto(photo, caption=cap))
+                        if photo == photos[len(photos)-1]:
+                            pic.append(InputMediaPhoto(photo, caption=cap1))
+                        else:
+                            pic.append(InputMediaPhoto(photo))
                     await message.reply_media_group(pic)
                 else:
-                    await message.reply(cap)
+                    await message.reply(cap1)
         except Exception as err:
-            await message.reply('**User** not Found.\n**Error:** `%s`' %(err))
-            
+            if message.from_user.id in self.admins:
+                await message.reply('**User** not Found.\n**Error:** `%s`' %(err))
+            else:
+                await message.reply('**User** not Found.')
