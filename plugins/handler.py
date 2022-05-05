@@ -19,10 +19,10 @@ async def fun(client, message: Message):
     if command == 'id':
         if reply_to_message:
             reply_to_message_from_id = reply_to_message.from_user.id
-            await Fun(client).idCommand(message, reply_to_message_from_id)
+            await Fun(client, admins).idCommand(message, reply_to_message_from_id)
         else:
             from_id = message.text.split(" ")[1] if len(message.text) > 4 else message.from_user.id
-            await Fun(client).idCommand(message, from_id)
+            await Fun(client, admins).idCommand(message, from_id)
 
 @Client.on_message(filters.user(users=admins) & filters.command(commands=admin_commands, prefixes=prefixes))
 async def admin(client, message: Message):
