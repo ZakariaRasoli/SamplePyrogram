@@ -1,9 +1,7 @@
+import typing
 from pyrogram import Client, enums
 from pyrogram.types import *
-
-from jdatetime import datetime as ds
-from datetime import datetime
-
+import outputformat as ouf
 
 class Fun:
     def __init__(self, app: Client, admins):
@@ -32,7 +30,6 @@ class Fun:
                 
                 cap1.append('**ID:** `%s`' %(user.id))
                 cap1.append('**Status:** `%s`' %(user2.status))
-                import outputformat as ouf
                 cap1 = str(ouf.showlist(cap1, style="box", title="**User Info** ‌    ‍ ‌", return_str=True))
  
                 if chat.type == enums.chat_type.ChatType.SUPERGROUP:
@@ -51,11 +48,11 @@ class Fun:
                             pic.append(InputMediaPhoto(photo, caption=cap1))
                         else:
                             pic.append(InputMediaPhoto(photo))
-                    await message.reply_media_group(pic)
+                    return await message.reply_media_group(pic)
                 else:
-                    await message.reply(cap1)
+                    return await message.reply(cap1)
         except Exception as err:
             if message.from_user.id in self.admins:
-                await message.reply('**User** not Found.\n**Error:** `%s`' %(err))
+                return await message.reply('**User** not Found.\n**Error:** `%s`' %(err))
             else:
-                await message.reply('**User** not Found.')
+                return await message.reply('**User** not Found.')
