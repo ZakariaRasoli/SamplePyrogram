@@ -30,7 +30,7 @@ async def admin(client, message: Message):
     if command == 'usage':
         await Admin(admins).usageCommand(message)
     elif command == 'ping':
-        await Admin(admins).pingCommand(message)
+        await Admin(admins).pingCommand(client ,message)
     elif command == 'eval':
         await Admin(admins).evalCommand(client, message)
 
