@@ -1,5 +1,5 @@
 from pyrogram.types import Message
-from pyrogram import Client, filters, errors, emoji
+from pyrogram import Client, filters, errors, emoji, enums
 from pyrogram.raw import functions
 
 from plugins.lib.globals import Admins
@@ -40,7 +40,10 @@ async def editAdmin(client: Client, message: Message):
     command = message.command[0]
     if command == 'eval':
         msgs = []
-        async for msg in client.get_discussion_replies(message.chat.id, message.id):
-            msgs.append(msg)
-        msg_edit = msgs[len(msgs)-1]
-        await Admin(admins).evalCommand(client, message, msg_edit)
+        if message.chat.type in [enums.chat_type.ChatType.GROUP, enums.chat_type.ChatType.PRIVATE]:
+            await Admin(admins).evalCommand(client, message)
+        else:
+            async for msg in client.get_discussion_replies(message.chat.id, message.id):
+                msgs.append(msg)
+            msg_edit = msgs[len(msgs)-1]
+            await Admin(admins).evalCommand(client, message, msg_edit)
