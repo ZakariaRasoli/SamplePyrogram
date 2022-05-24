@@ -81,7 +81,7 @@ class Admin:
 
         final_output = "**Code**:\n"
         final_output += f"```{cmd}```\n\n"
-        final_output += "**Outpot**:\n"
+        final_output += "**Output**:\n"
         final_output += f"```{evaluation.strip()}```\n"
         
         return final_output
