@@ -15,12 +15,12 @@ class Admin:
         em = emoji.CARD_INDEX_DIVIDERS
         await message.reply(f"{em} **Memory usage**: `{memory}`" )
 
-    async def pingCommand(self, message: Message):
+    async def pingCommand(self, client: Client, message: Message):
         time0 = time.time()
-        msg = await message.reply_text("`Pong took ...`")
+        await client.send_chat_action(message.chat.id, enums.chat_action.ChatAction.TYPING)
         time1 = time.time()
         tm = round((time1 - time0) * 1000, 2)
-        await msg.edit_text(f'`Pong took {tm} ms.`')
+        await message.reply(f'`Pong took {tm} ms.`')
 
     async def evalCommand(self, client: Client, message: Message, edit: Message = None):
         if edit:
