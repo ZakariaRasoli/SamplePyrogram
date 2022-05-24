@@ -1,5 +1,5 @@
-import os, io, sys, traceback
-import time
+import enum
+import os, io, sys, traceback, psutil, time
 from pyrogram import Client, emoji, enums
 from pyrogram.types import Message
 
@@ -9,7 +9,6 @@ class Admin:
         self.admins = admins
 
     async def usageCommand(self, message: Message):
-        import psutil
         process = psutil.Process(os.getpid())
         memory = self.get_size(process.memory_info().rss)
         em = emoji.CARD_INDEX_DIVIDERS
@@ -80,10 +79,10 @@ class Admin:
         else:
             evaluation = "Success"
 
-        final_output = "<b>Code</b>:\n"
-        final_output += f"<code>{cmd}</code>\n\n"
-        final_output += "<b>Outpot</b>:\n"
-        final_output += f"<code>{evaluation.strip()}</code>\n"
+        final_output = "**Code**:\n"
+        final_output += f"```{cmd}```\n\n"
+        final_output += "**Outpot**:\n"
+        final_output += f"```{evaluation.strip()}```\n"
         
         return final_output
 
