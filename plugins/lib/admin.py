@@ -1,6 +1,6 @@
 import os, io, sys, traceback
 import time
-from pyrogram import Client, emoji
+from pyrogram import Client, emoji, enums
 from pyrogram.types import Message
 
 
