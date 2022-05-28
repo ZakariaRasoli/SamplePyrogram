@@ -4,7 +4,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-plugins = dict(root='plugins', include=['handlers'])
+plugins = dict(root='plugins')
 
 Client(
     "my_online",
