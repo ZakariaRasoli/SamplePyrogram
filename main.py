@@ -1,14 +1,19 @@
-from pyrogram import Client
-import configparser
+import asyncio, pyrogram, pytgcalls
+from clients import cli, api, calls
 
-config = configparser.ConfigParser()
-config.read('config.ini')
 
-plugins = dict(root='plugins')
+async def main():
+    apps = [cli, api]
+    for app in apps:
+        await app.start()
+    await calls.start()
+    await pyrogram.idle()
+    await pytgcalls.idle()
+    for app in apps:
+        await app.stop()
 
-Client(
-    "my_online",
-    api_id=config['pyrogram']['api_id'],
-    api_hash=config['pyrogram']['api_hash'],
-    plugins=plugins
-).run()
+
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+    loop.run_forever()
