@@ -77,8 +77,3 @@ class db:
 
 
 
-
-# print(db().select_with_plug_name('id'))
-# db().insert_with_id('plugins', ['session', 'session', 'session telegram', 'on', '139328010'])
-# print(db().create('plugins', ['id', 'plug_name', 'plug_commands', 'plug_help', 'status', 'update_from_id']))
-# db().update('plugins', 3, "status = 'on' ")
