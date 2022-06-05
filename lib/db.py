@@ -1,10 +1,10 @@
-import json
-import sqlite3
+import json, sqlite3
+from clients import db_file
 
 class db:
 
     def __init__(self):
-        self.db = sqlite3.connect('database.db') 
+        self.db = sqlite3.connect(db_file) 
         self.cur = self.db.cursor()
     
     def query(self, query: str):
