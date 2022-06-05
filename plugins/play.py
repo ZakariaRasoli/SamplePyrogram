@@ -1,17 +1,14 @@
-import asyncio
-import shutil, os
+import asyncio, shutil, os, re
 from pyrogram.types import *
 from pyrogram import Client, filters
-from lib.globals import Global
+from lib.globals import ADMINS, PREFIXES, HelperID, Global
 from pytgcalls.types import *
 from pytgcalls.exceptions import NoAudioSourceFound, NoActiveGroupCall, GroupCallNotFound
 from clients import calls
 
-prefixes = Global().prefixes()
-admins = Global().admins()
-command = Global().get_command(__file__)
+command = command = Global().get_commands(__file__)
 
-@Client.on_message(filters.command(commands=command, prefixes=prefixes))
+@Client.on_message(filters.user(users=ADMINS) & filters.regex("^["+"\\".join(PREFIXES)+f"""]?({"|".join(command)})$""", re.U | re.I))
 async def play(client: Client, message: Message):
     msg1 = await message.reply('**Please Wait ...**')
     if message.reply_to_message and message.reply_to_message.audio:
@@ -24,11 +21,11 @@ async def play(client: Client, message: Message):
             active_call = calls.get_active_call(message.chat.id)
             infos = await calls.get_participants(message.chat.id)
             for i in infos:
-                if i.user_id == admins[0]:
+                if i.user_id == ADMINS[0]:
                     info = i
             if info.muted_by_admin == False:
                 if active_call.is_playing == True:
-                    msg = await client.get_inline_bot_results("@OnPyBot", 'vcc_%s_%s_%s' %(message.chat.id, str(info.volume), title))
+                    msg = await client.get_inline_bot_results(HelperID, 'vcc_%s_%s_%s' %(message.chat.id, str(info.volume), title))
                     await message.reply_inline_bot_result(msg.query_id, msg.results[0].id)
                 else:
                     await calls.leave_group_call(message.chat.id)

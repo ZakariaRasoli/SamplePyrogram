@@ -1,13 +1,12 @@
 from pyrogram.types import *
 from pyrogram import Client, filters, enums
 import outputformat as ouf
-from lib.globals import Global
+from lib.globals import ADMINS, PREFIXES, Global
+import re
 
-prefixes = Global().prefixes()
-admins = Global().admins()
-command = Global().get_command(__file__)
+command = command = Global().get_commands(__file__)
 
-@Client.on_message(filters.command(commands=command, prefixes=prefixes))
+@Client.on_message(filters.regex("^["+"\\".join(PREFIXES)+f"""]?({"|".join(command)})\s?(\@\w{5,32}|\-?\d{6,20})?$""", re.U | re.I))
 async def id(client: Client, message: Message):
     reply_to_message = message.reply_to_message
     if reply_to_message:
@@ -33,7 +32,7 @@ async def idCommand(client: Client, message: Message, from_id):
             if user.last_name: cap1.append('Lastname: %s' %(user.last_name))
             if user.dc_id: cap1.append('DC-ID: %s' %(user.dc_id))
             cap1.append('ID: %s' %(user.id))
-            cap1.append('Status: %s' %(message.from_user.status))
+            cap1.append('Status: %s' %(message.from_user.status.name.capitalize()))
             if user.bio: cap1.append('Bio: %s' %(user.bio))
             cap1 = str(ouf.showlist(cap1, style="box", title="User Info", return_str=True))
 
@@ -72,7 +71,7 @@ async def idCommand(client: Client, message: Message, from_id):
         else:
             return await message.reply('<code>' + cap1 + '</code>')
     except Exception as err:
-        if message.from_user.id in admins:
+        if message.from_user.id in ADMINS:
             return await message.reply('**User** not Found.\n**Error:** `%s`' %(err))
         else:
             return await message.reply('**User** not Found.')
