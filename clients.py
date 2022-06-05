@@ -1,6 +1,4 @@
-import pyrogram
-import pytgcalls
-import configparser
+import pyrogram, configparser, pytgcalls
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -25,3 +23,5 @@ api = pyrogram.Client(
 )
 
 calls = pytgcalls.PyTgCalls(cli, cache_duration=100, overload_quiet_mode=True)
+
+db_file = config['database']['db_file']
