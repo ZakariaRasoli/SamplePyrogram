@@ -1,7 +1,6 @@
 import asyncio, pyrogram, pytgcalls
 from clients import cli, api, calls
 
-
 async def main():
     apps = [cli, api]
     for app in apps:
@@ -12,8 +11,6 @@ async def main():
     for app in apps:
         await app.stop()
 
-
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
-    loop.run_forever()
