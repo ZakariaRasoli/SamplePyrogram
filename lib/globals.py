@@ -1,7 +1,8 @@
 import configparser, os
+import json
 from lib.db import db
 
-class Global():
+class Global:
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config.read('config.ini')
@@ -14,13 +15,19 @@ class Global():
         return ADMINS
 
     def prefixes(self):
-        return ['.', '', '!', '#']
+        return ['.', '!', '#']
 
-    def get_command(self, file):
+    def helperID(self):
+        return self.config['helper']['id']
+
+    def get_commands(self, file):
         plug_name = os.path.basename(file).split('.', 1)[0]
-        return [db().select_with_plug_name(plug_name)[0][2]]
+        js = json.loads(db().select_with_plug_name(plug_name)[2])
+        result = []
+        for key in js.keys():
+            result.append(js[key])
+        return result
 
-    
-
-
-
+PREFIXES = Global().prefixes()
+ADMINS = Global().admins()
+HelperID = Global().helperID()
